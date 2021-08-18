@@ -1,11 +1,17 @@
 #include <Arduino.h>
 #include <TimerOne.h>
-#include "HIDPowerDevice.h"
+#include "upsw.h"
+#include "config.h"
 
-void blinkLed();
-void setup();
-void loop();
-double approxBatVoltage(int analogReading);
-void initUPS(void);
-void updateUPS(bool charging, bool acPresent, bool reqShutdown, bool batteryPresent, uint16_t remaining, uint16_t runtimeToEmpty);
-int sendReport(bool discharging, bool force);
+/**
+ * calculate the battery voltage from a analog reading)
+ * 
+ * @param analogReading the analogRead() value on the battery sense ping
+ * @return the battery voltage, in volts
+ */
+double calculateBatteryVoltage(int analogReading);
+
+/**
+ * handler function for hearthbeat
+ */
+void hearthbeatHandler();
