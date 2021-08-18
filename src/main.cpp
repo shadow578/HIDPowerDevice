@@ -1,5 +1,4 @@
-#include "src/HIDPowerDevice.h"
-#include <TimerOne.h>
+#include "main.h"
 
 #define ENABLE_CDC
 
@@ -28,6 +27,13 @@ const char STRING_SERIAL[] PROGMEM = "UPSDbg";
 #define MIN_CAPACITY 10            //%
 #define VOLTAGE 240 * 1000         //mV; dummy value
 
+bool ledState = false;
+void blinkLed()
+{
+  ledState = !ledState;
+  digitalWrite(HEARTHBEAT_LED, ledState);
+}
+
 void setup()
 {
   // init HID power device
@@ -52,13 +58,6 @@ void setup()
   // blink led to show we are working
   Timer1.initialize(500000);
   Timer1.attachInterrupt(blinkLed);
-}
-
-bool ledState = false;
-void blinkLed()
-{
-  ledState = !ledState;
-  digitalWrite(HEARTHBEAT_LED, ledState);
 }
 
 uint32_t lastUpdateMillis = 0;
