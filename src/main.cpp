@@ -36,7 +36,7 @@ void loop()
   // get percent value for battery voltage
   int batteryPercent = (int)round(((batteryVoltage - BAT_MIN_VOLTAGE) * 100) / (BAT_MAX_VOLTAGE - BAT_MIN_VOLTAGE));
   bool isBatteryLow = batteryPercent <= MIN_CAPACITY;
-  bool isNoBattery = batteryVoltage <= BAT_NO_VOLTAGE;
+  bool isBatteryPresent = batteryVoltage <= BAT_NO_VOLTAGE;
 
   // ignore low battery if on ac power
   // and overwrite capacity to minimum that should not cause issues
@@ -52,9 +52,11 @@ void loop()
   if (batteryPercent > 100)
     batteryPercent = 100;
 
+  // approximate time until discharge
+  uint16_t timeUntilDischarged = Runtime_calculateEstimate(batteryPercent, !isAcPresent);
+
   // update UPS values
-  //TODO time approximation
-  UPS_update(isAcPresent, isAcPresent, isBatteryLow, isNoBattery, batteryPercent, 0);
+  UPS_update(isAcPresent, isAcPresent, isBatteryLow, isBatteryPresent, batteryPercent, timeUntilDischarged);
 
   // send report to the host
   bool forceUpdate = (millis() - lastReportTime) > MIN_UPDATE_INTERVAL;
@@ -90,7 +92,7 @@ void loop()
   Serial.print("%, is_low: ");
   Serial.print(isBatteryLow);
   Serial.print(", no_battery: ");
-  Serial.print(isNoBattery);
+  Serial.print(isBatteryPresent);
   Serial.print("; force_update: ");
   Serial.print(forceUpdate);
   Serial.print("; hid_report_result: ");

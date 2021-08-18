@@ -82,13 +82,13 @@ const char STRING_SERIAL[] PROGMEM = "UPSDbg";
 /**
  * the average discharge time, in seconds
  */
-#define AVG_DISCHARGE_TIME 300 // 5 minutes
+#define AVG_DISCHARGE_TIME 600 // 10 minutes
 
 /**
  * the minimum time remaining, in seconds. 
  * if this time is reached, host computers will shutdown 
  */
-#define MIN_REMAINING_TIME 600
+#define MIN_REMAINING_TIME 120 // 2 minutes
 
 /**
  * design capacity. because units are hardcoded to percent, this does not really make sense to change.

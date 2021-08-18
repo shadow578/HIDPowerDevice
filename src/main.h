@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <TimerOne.h>
 #include "upsw.h"
+#include "runtimeEstimate.h"
 #include "config.h"
 
 /**
