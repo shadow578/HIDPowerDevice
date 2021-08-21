@@ -1,57 +1,82 @@
-# HID UPS Power Device Library for Arduino
-This library allows an Arduino board with USB capabilities to act as a HID-compliant UPS according to USB HID specifications. 
-The library is useful if you want to build a smart UPS or other power device, which can report its state to the PC host
-or perform power on/power off operations as necessary for your project.
+# HID Power Device for Arduino
 
-For more information about USB HID specs please read https://www.usb.org/sites/default/files/pdcv11.pdf
+This project allows an Arduino board with USB capabilities to act as a HID- compliant UPS.
 
-## Supported Arduinos
-* Leonardo
-* (Pro)Micro
+The project is useful if you want to build a smart UPS or other power device, which can report its status to the host PC.
+
+For more information have a look at the [USB HID specs](https://www.usb.org/sites/default/files/pdcv11.pdf)
+
+For more information about USB HID specs please read 
+
+
+## Supported Boards
+
+- Leonardo
+- (Pro) Micro
+
 
 ## Setup & Usage
-Setup is very simple. Just clone this repository and upload the sketch HIDPowerDevice.ino.
-Once upload is completed successfully you will find HID Device Battery in  
-your system.
 
-## Additional setup for NUT
-[NUT](https://networkupstools.org/) is dumb, see [here](https://github.com/abratchik/HIDPowerDevice/issues/1#issuecomment-826086454).
+Setup is simple. Just clone this repo, update the `config.h` file to match your hardware, and upload using [PlatformIO](https://platformio.org/).
 
-> Managed to get this working with NUT (on TrueNas SCALE, tho it should work on any other os too). Quick note that this solution is really just multiple hacks, but hey, if it works it > ain't stupid.
-> 
-> 1. you have to disable CDC so the HID device is the only descriptor on the arduino. Luckily, the AVR Cores have a [pull request](https://github.com/arduino/ArduinoCore-avr/pull/383) > implementing exactly this, so you just have to kinda copy that. It may also be possible to keep CDC as the second / third descriptor, but just disabling it is way simpler.
-> 
-> 2. since we now no longer have Serial, all calls to Serial.* have to be removed / commented in HIDPowerDevice.ino
-> 
-> 3. lastly, NUT for some reason does not detect the device with stock PID and VID, so you have to change it. This can be done in the boards.txt file, keys leonardo.build.vid and > leonardo.build.pid. I just values equivalent to a [EATON E51100iUSB](https://networkupstools.org/ddl/Eaton/5E1100iUSB.html), tho any random ups that supports the usbhid-ups driver > should work fine for this.
-> 
-> 4. upload the sketch. This has to be done using a ICSP (like a USBASP) as we disabled CDC. Well, technically you could upload using the "normal" method, however only the first time.
-> 
-> The NUT config file looks something like this:
+You may have to adjust the `PATCH_EXE` variable in `patch_core.py` if you're getting errors.
+
+Once upload is complete you will find your HID Battery in your system.
+
+
+### NUT
+
+[NUT](https://networkupstools.org/) decided to kinda ignore the HID spec and only check on USB Interface 0 (see [here](https://github.com/abratchik/HIDPowerDevice/issues/1)).
+
+While my original workaround is still valid, it has been automated with the switch to PlatformIO. so you don't really have to do any changes to the project (maybe change hwids in `patch_hwid.py`).
+
+
+The Arduino will pretend to be a [EATON E51100iUSB](https://networkupstools.org/ddl/Eaton/5E1100iUSB.html). 
+to make it work with NUT, use the following config file:
+
 > ```
 > [ups]
 >   driver = usbhid-ups
 >   port = auto
 >   desc = Arduino UPS  // optional
->   pollfreq = 30             // optional
->   vendorid = 0463       // same as in boards.txt
->   productid = ffff         // same as in boards.txt
+>   pollfreq = 30       // optional
+>   vendorid = 0463     // same as in boards.txt
+>   productid = ffff    // same as in boards.txt
 > ```
-> (pollfreq, vendorid and productid can be added in "Auxiliary Parameters (ups.conf)" field in TrueNas)
-> 
-> From here on, it's just like with any other UPS.
-> Note, however, that this solution really is just a bunch of hacks to the arduino core, and may break any time. That being said, I'd also recommend reverting all changed files to  their  original state to avoid unpleasant surprises with other projects.
 
-## Tested on Operating Systems
-* Mac OSX 10.14.6 Mojave
-* Ubuntu 18.04.05 LTS 
-* Windows 10
+\* (pollfreq, vendorid and productid can be added in 'Auxiliary Paramters (ups.conf)' field in TrueNAS)
+
+
+## Tested Operating Systems
+
+- Windows 10
+- TrueNAS Core
+- Ubuntu 18.04.05 LTS\*
+- Mac OSX 10.14.6 Mojave\*
+
+\* tested by [abratchik](https://github.com/abratchik/HIDPowerDevice), but should work since the core logic did not change.
+
 
 ## License
 
-Original work by [abratchik](https://github.com/abratchik/HIDPowerDevice).
-Modifications by shadow578
+Adaptions to a standalone project + NUT support + change to PlatformIO by shadow578 (everything except `/src/pdlib/`):
+> Copyright 2021 shadow578
+> 
+> Licensed under the Apache License, Version 2.0 (the "License");
+> you may not use this file except in compliance with the License.
+> You may obtain a copy of the License at
+> 
+> http://www.apache.org/licenses/LICENSE-2.0
+> 
+> Unless required by applicable law or agreed to in writing, > software
+> distributed under the License is distributed on an "AS IS" BASIS,
+> WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or > implied.
+> See the License for the specific language governing permissions > and
+> limitations under the License.
 
+---
+
+Original library by [abratchik](https://github.com/abratchik/HIDPowerDevice) (the library is contained in `/src/pdlib/`):
 > Copyright (c) Alex Bratchik 2020. All right reserved.
 >
 > This library is free software; you can redistribute it and/or
