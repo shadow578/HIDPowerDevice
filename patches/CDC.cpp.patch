@@ -1,0 +1,10 @@
+24a25,31
+> #ifndef CDC_ENABLED
+> 
+> #warning "! Disabled serial console via USB (CDC)!"
+> #warning "! With this change you'll have to use the Arduino's reset button/pin to flash (upload)!"
+> 
+> #else // CDC not disabled
+> 
+319a327
+> #endif /* if defined(CDC_ENABLED) */
