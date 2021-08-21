@@ -11,7 +11,7 @@
 /**
  * disable shutdown requests to the host, useful when debugging
  */
-#define DO_NOT_SHUTDOWN
+//#define DO_NOT_SHUTDOWN
 
 /**
  * pin the hearthbeat LED is attached to.
@@ -53,7 +53,7 @@
 /**
  * highest possible battery voltage (~100%)
  */
-#define BAT_MAX_VOLTAGE 13.5
+#define BAT_MAX_VOLTAGE 13.4
 
 /**
  * voltage measured when no battery is installed

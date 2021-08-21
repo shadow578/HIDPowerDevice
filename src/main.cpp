@@ -64,8 +64,9 @@ void loop()
   int reportResult = UPS_sendReport(!isAcPresent, forceUpdate, &didSendReport);
   if (reportResult < 0)
   {
-    // send failure
+    // send failure, light error LED and retry next loop
     digitalWrite(COMM_FAIL_LED, HIGH);
+    didSendReport = false;
   }
   else
   {
