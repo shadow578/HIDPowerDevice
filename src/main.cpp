@@ -124,7 +124,7 @@ double calculateBatteryVoltage(int analogReading)
   const double ubatReal = (analogReading + 550) / 352.5;
 
   // adjust scale
-  return ubatReal / 0.25;
+  return ubatReal / 0.21;
 }
 
 bool hearthbeatLedState = false;

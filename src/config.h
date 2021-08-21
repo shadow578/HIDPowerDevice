@@ -4,7 +4,9 @@
 /**
  * enable CDC (Serial) of the leonardo. this has to be changed in the core too, see README for that
  */
+#ifndef CDC_DISABLED
 #define ENABLE_CDC
+#endif
 
 /**
  * disable shutdown requests to the host, useful when debugging
@@ -46,12 +48,12 @@
 /**
  * lowest possible battery voltage (~0%)
  */
-#define BAT_MIN_VOLTAGE 10.5
+#define BAT_MIN_VOLTAGE 10.6
 
 /**
  * highest possible battery voltage (~100%)
  */
-#define BAT_MAX_VOLTAGE 14.5
+#define BAT_MAX_VOLTAGE 13.5
 
 /**
  * voltage measured when no battery is installed
@@ -82,13 +84,13 @@ const char STRING_SERIAL[] PROGMEM = "UPSDbg";
 /**
  * the average discharge time, in seconds
  */
-#define AVG_DISCHARGE_TIME 600 // 10 minutes
+#define AVG_DISCHARGE_TIME 300 // 5 minutes
 
 /**
  * the minimum time remaining, in seconds. 
  * if this time is reached, host computers will shutdown 
  */
-#define MIN_REMAINING_TIME 120 // 2 minutes
+#define MIN_REMAINING_TIME 90 // 1,5 minutes
 
 /**
  * design capacity. because units are hardcoded to percent, this does not really make sense to change.
@@ -104,12 +106,12 @@ const char STRING_SERIAL[] PROGMEM = "UPSDbg";
 /**
  * the capacity the host should warn the battery is running low, in percent
  */
-#define WARN_CAPACITY 25
+#define WARN_CAPACITY 40
 
 /**
  * the minimum allowed capacity. the host should shut down when this capacity is reached. in percent
  */
-#define MIN_CAPACITY 10
+#define MIN_CAPACITY 20
 
 /**
  * 'measured' line voltage, in V.
